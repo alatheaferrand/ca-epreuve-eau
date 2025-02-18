@@ -21,7 +21,7 @@ def fibonacci(index)
 end
 
 # Gestion d'erreur
-if ARGV.length != 1 || ARGV[0] !~ (/\A\d+\z/) || ARGV[0].to_i < 0
+if ARGV.length != 1 || ARGV[0] !~ (/\A\d+\z/)
   puts '-1'
   exit
 end
