@@ -27,9 +27,10 @@ if ARGV.length != 1 || ARGV[0] !~ (/\A\d+\z/) || ARGV[0].to_i < 0
 end
 
 # Parsing
+index = ARGV[0].to_i
 
 # Resolution
-resultat = fibonacci(ARGV[0])
+resultat = fibonacci(index)
 
 # Resultat
 puts resultat
