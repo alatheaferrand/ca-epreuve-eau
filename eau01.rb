@@ -20,9 +20,9 @@ def combinaisons(params)
 
 # Gestion d'erreur
 if !ARGV.empty?
-    puts 'error'
-    exit
-  end
+  puts 'error'
+  exit
+end
 
 # Parsing
 chiffres = ('0'..'9').to_a
