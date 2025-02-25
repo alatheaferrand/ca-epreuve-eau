@@ -1,34 +1,24 @@
+# frozen_string_literal: true
+
 # Combinaison de 2 nombres
 # Affiche toutes les différentes combinaisons de deux nombres entre 00 et 99 dans l'ordre croissant
 
-# Fonction
-def combinaisons(params)
-    result = []
-    for n in (0...params.length)
-      for m in (0...params.length - 1)
-        for a in (0...params.length)
-          for b in (0...params.length)
-            if "#{n}#{m}" < "#{a}#{b}"
-              result << "#{n}#{m} #{a}#{b},"
-            end
-          end
-        end
-      end
-    end
-    return result.join(' ').chomp(',')
-  end
-
-# Gestion d'erreur
-if !ARGV.empty?
-  puts 'error'
-  exit
+# Resolution
+def format_numbers(number)
+  number < 10 ? "0#{number}" : number.to_s
 end
 
-# Parsing
-chiffres = ('0'..'9').to_a
+def generate_pairs_combinations
+  result = []
+  (0..98).each do |i|
+    ((i + 1)..99).each { |j| result << "#{format_numbers(i)} #{format_numbers(j)}" }
+  end
+  result
+end
 
-# Resolution
-resultat = combinaisons(chiffres)
+def display_pairs_combinations
+  puts generate_pairs_combinations.join(', ')
+end
 
-# Resultat
-puts resultat
+# Affichage
+display_pairs_combinations
