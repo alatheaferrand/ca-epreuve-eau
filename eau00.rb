@@ -1,30 +1,24 @@
+# frozen_string_literal: true
+
 # Combinaisons de 3 chiffres
-# Affiche toutes les différentes combinaisons possibles de trois chiffres dans l'ordre croissant
-
-# Fonctions
-def combinaisons(params)
-  result = []
-  for n in (0...params.length - 2 )
-    for m in (n+1...params.length - 1)
-      for p in (m+1...params.length)
-          result << "#{params[n]}#{params[m]}#{params[p]}"
-      end
-    end
-  end
-  return result.join(' ')
-end
-
-# Gestion d'erreur
-if !ARGV.empty?
-  puts 'error'
-  exit
-end
-
-# Parsing
-chiffres = ('0'..'9').to_a
+# Affiche toutes les différentes combinaisons possibles de trois chiffres
+# dans l'ordre croissant, dans l'ordre croissant
 
 # Résolution
-resultat = combinaisons(chiffres)
+result = []
+i = 0
+while i <= 7
+  j = i + 1
+  while j <= 8
+    k = j + 1
+    while k <= 9
+      result << "#{i}#{j}#{k}"
+      k += 1
+    end
+    j += 1
+  end
+  i += 1
+end
 
-# Affiche du résultat
-puts resultat
+# Affichage
+puts result.join(', ')
