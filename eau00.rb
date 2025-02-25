@@ -5,7 +5,7 @@
 # dans l'ordre croissant, dans l'ordre croissant
 
 # Résolution
-def afficher_combinaisons
+def display_combinations
   result = []
   (0..7).each do |i|
     (i + 1..8).each do |j|
@@ -16,4 +16,4 @@ def afficher_combinaisons
 end
 
 # Affichage
-afficher_combinaisons
+display_combinations
