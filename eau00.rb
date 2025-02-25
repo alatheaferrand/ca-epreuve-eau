@@ -5,20 +5,15 @@
 # dans l'ordre croissant, dans l'ordre croissant
 
 # Résolution
-result = []
-i = 0
-while i <= 7
-  j = i + 1
-  while j <= 8
-    k = j + 1
-    while k <= 9
-      result << "#{i}#{j}#{k}"
-      k += 1
+def afficher_combinaisons
+  result = []
+  (0..7).each do |i|
+    (i + 1..8).each do |j|
+      (j + 1..9).each { |k| result << "#{i}#{j}#{k}" }
     end
-    j += 1
   end
-  i += 1
+  puts result.join(', ')
 end
 
 # Affichage
-puts result.join(', ')
+afficher_combinaisons
