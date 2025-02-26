@@ -1,27 +1,32 @@
+# frozen_string_literal: true
+
 # Paramètres à l'envers
 # Affiche ses arguments reçus à l'envers
 
-# Fonction
-def lire_a_lenvers()
-  arguments = []
-  i = ARGV.length - 1
+# Utility Functions
+def reverse_array(array)
+  reversed = []
+  i = array.length - 1
   while i >= 0
-    arguments << ARGV[i]
+    reversed << array[i]
     i -= 1
   end
-  return arguments
+  reversed
 end
   
-# Gestion d'erreur
-if ARGV.empty?
-  puts 'error'
-  exit
+# Error Handling
+def validate_arguments
+  if ARGV.empty?
+    puts 'error'
+    exit
+  end
 end
 
-# Parsing
+# Problem Solving
+def solve
+  validate_arguments
+  puts reverse_array(ARGV)
+end
 
-# Resolution
-resultat = lire_a_lenvers()
-
-# Resultat
-puts resultat
+# Execution
+solve
