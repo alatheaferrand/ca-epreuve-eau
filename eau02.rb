@@ -3,30 +3,46 @@
 # Paramètres à l'envers
 # Affiche ses arguments reçus à l'envers
 
+# ========================
 # Utility Functions
-def reverse_array(array)
+# ========================
+def reverse_arguments(args)
   reversed = []
-  i = array.length - 1
+  i = args.length - 1
   while i >= 0
-    reversed << array[i]
+    reversed << args[i]
     i -= 1
   end
   reversed
 end
-  
+
+# ========================
 # Error Handling
-def validate_arguments
-  if ARGV.empty?
-    puts 'error'
-    exit
-  end
+# ========================
+def check_arguments_presence(args)
+  return if args.size >= 2
+
+  puts 'error: at least 2 arguments required'
+  exit
 end
 
+# ========================
+# Parsing Arguments
+# ========================
+def parse_arguments
+  ARGV
+end
+
+# ========================
 # Problem Solving
-def solve
-  validate_arguments
-  puts reverse_array(ARGV)
+# ========================
+def reverse_and_display_arguments
+  args = parse_arguments
+  check_arguments_presence(args)
+  puts reverse_arguments(args)
 end
 
+# ========================
 # Execution
-solve
+# ========================
+reverse_and_display_arguments
