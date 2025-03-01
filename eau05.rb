@@ -1,41 +1,51 @@
+# frozen_string_literal: true
+
 # String dans string
-# Détermine si une chaîne de caractères est contenu dans une autre chaîne
-# Affiche error et quitter le programme en cas de problèmes d'arguments
+# Détermine si une chaîne de caractères est contenue dans une autre chaîne.
+# Affiche error et quitte le programme en cas de problèmes d'arguments.
 
-# Fonction
-def contient(string1, string2)
-  longueur1 = string1.length
-  longueur2 = string2.length
+# ========================
+# Utility Functions
+# ========================
+def substring?(text, pattern)
+  text_length = text.length
+  pattern_length = pattern.length
 
-  # Parcours string1 pour chercher string2
-  i = 0
-  while i <= longueur1 - longueur2
-    j = 0
-    # Vérification caractère par caractère
-    while j < longueur2 && string1[i + j] == string2[j]
-      j += 1
-    end
-    # Si on a trouvé tout la string2 dans string1, on retourne true
-    return 'true' if j == longueur2
-
-    i += 1
+  (0..text_length - pattern_length).each do |i|
+    return true if text[i, pattern_length] == pattern
   end
 
-  return 'false'
+  false
 end
 
-# Gestion d'erreur
-if ARGV.length != 2
-  puts 'error'
+# ========================
+# Error Handling
+# ========================
+def validate_arguments(args)
+  return if args.size == 2 && args.none?(&:empty?)
+
+  puts 'error: 2 arguments required'
   exit
 end
 
-# Parsing
-string1 = ARGV[0]
-string2 = ARGV[1]
+# ========================
+# Parsing Arguments
+# ========================
+def parse_arguments
+  args = ARGV
+  validate_arguments(args)
+  args
+end
 
-# Resolution
-resultat = contient(string1, string2)
+# ========================
+# Problem Solving
+# ========================
+def contains_substring?
+  text, pattern = parse_arguments
+  substring?(text, pattern)
+end
 
-# Resultat
-puts resultat
+# ========================
+# Execution
+# ========================
+puts contains_substring?
