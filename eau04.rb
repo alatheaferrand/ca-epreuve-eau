@@ -1,57 +1,58 @@
+# frozen_string_literal: true
+
 # Prochain nombre premier
 # Affiche le premier nombre premier supérieur au nombre donné en argument
 # Affiche -1 si le paramètre est négatif ou mauvais
 
-# Fonction
-def prochain_premier(params)
-
-  # Cas particuliers
-  if params <= 1
-    return 2
-  elsif params == 2
-    return 3
-  end
-
-  # Initialise params au nombre impair supérieur au nombre donné
-  if params % 2 == 0
-    params += 1
-  else
-    params += 2
-  end
-
-  # Boucle infinie jusqu'à trouver un nombre premier
-  while true
-    diviseur = false
-    i = 3
-
-    # Vérifie si params est un nombre premier
-    while i * i <= params
-      if params % i == 0
-        diviseur = true
-        break # On sort de cette boucle si on trouve un diviseur
-      end
-      i += 2 # On teste uniquement les nombres impairs
-    end
-
-    # Si aucun diviseur n'a été trouvé, on retourne params
-    return params unless diviseur
-
-    # Sinon, on passe au prochain impair et on recommance la boucle
-    params += 2
-  end  
+# ========================
+# Utility Functions
+# ========================
+def numeric?(arg)
+  !Integer(arg, exception: false).nil?
 end
 
-# Gestion d'erreur
-if ARGV.length != 1 || ARGV[0] !~ (/\A\d+\z/)
+def prime?(number, divisor = 2)
+  return true if divisor * divisor > number
+  return false if (number % divisor).zero?
+
+  prime?(number, divisor + 1)
+end
+
+def next_prime(number)
+  number += 1
+  return number if prime?(number, 2)
+
+  next_prime(number)
+end
+
+# ========================
+# Error Handling
+# ========================
+def validate_argument(args)
+  return if args.size == 1 && numeric?(args[0]) && args[0].to_i.positive?
+
   puts '-1'
   exit
 end
 
-# Parsing
-params = ARGV[0].to_i
+# ========================
+# Parsing Arguments
+# ========================
+def extract_valid_argument
+  args = ARGV
+  validate_argument(args)
+  args[0].to_i
+end
 
-# Resolution
-resultat = prochain_premier(params)
+# ========================
+# Problem Solving
+# ========================
+def compute_next_prime
+  number = extract_valid_argument
+  next_prime(number)
+end
 
-# Resultat
-puts resultat
+# ========================
+# Execution
+# ========================
+puts compute_next_prime
