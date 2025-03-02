@@ -1,44 +1,44 @@
+# frozen_string_literal: true
+
 # Chiffres only
-# Détermine si une chaîne de caractères ne contient que des chiffres
-# Affiche error et quitter le programme en cas de problèmes d'arguments
+# Détermine si une chaîne de caractères ne contient que des chiffres.
+# Affiche "error" et quitte le programme en cas de problème d'arguments.
 
-# Fonction
-def chiffres_only(string)
-  longueur = string.length
-  chiffres = ('0'..'9').to_a
-
-  i = 0
-  while i < longueur
-    # Vérifier si string[i] est un chiffre
-    est_chiffre = false
-    for n in (0...chiffres.length)
-      if string[i] == chiffres[n]
-        est_chiffre = true
-        break
-      end
-    end
-
-    # Si un caractère n'est pas un chiffre, on retourne false
-    return false unless est_chiffre
-
-    i += 1
-  end
-
-  return true # Si toute la boucle passe, c'est que la chaîne ne contient que des chiffres
+# ========================
+# Utility Functions
+# ========================
+def numeric?(text)
+  text.chars.all? { |char| char.between?('0', '9') }
 end
 
+# ========================
+# Error Handling
+# ========================
+def validate_argument_presence(args)
+  return if args.size == 1 && !args[0].empty?
 
-# Gestion d'erreur
-if ARGV.empty? || ARGV.length > 1
   puts 'error'
   exit
 end
 
-# Parsing
-string = ARGV[0]
+# ========================
+# Parsing Arguments
+# ========================
+def extract_text_argument
+  args = ARGV
+  validate_argument_presence(args)
+  args[0]
+end
 
-# Resolution
-resultat = chiffres_only(string)
+# ========================
+# Problem Solving
+# ========================
+def check_numeric_string
+  text = extract_text_argument
+  numeric?(text)
+end
 
-# Resultat
-puts resultat
+# ========================
+# Execution
+# ========================
+puts check_numeric_string
