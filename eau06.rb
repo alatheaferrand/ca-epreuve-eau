@@ -9,7 +9,7 @@
 # Utility Functions
 # ========================
 def alternate_case_text(text)
-  result = String.new
+  result = +'' # Chaîne mutable, même avec frozen_string_literal: true
   processed_letters = 0
 
   text.each_char do |char|
