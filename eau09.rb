@@ -1,48 +1,50 @@
+# frozen_string_literal: true
+
 # Entre min et max
-# Affche toutes les valeurs comprises entre deux nombres dans l'ordre croissant
-# Min inclus, max exclus
-# Affiche error et quitter le programme en cas de problèmes d'arguments
+# Affiche toutes les valeurs comprises entre deux nombres dans l'ordre croissant.
+# Min inclus, max exclus.
+# Affiche "error" et quitte le programme en cas de problème d'arguments.
 
-# Fonctions
-def entre_min_et_max(min, max)
-  if min > max
-    min, max = max, min
-  end
-
-  result = []
-  i = min
-  while i < max
-    result << i
-    i += 1
-  end
-  return result
+# ========================
+# Utility Functions
+# ========================
+def numeric?(arg)
+  !Integer(arg, exception: false).nil?
 end
 
-def array_to_string(array)
-  i = 0
-  string = ""
-  while i < array.length
-    string << array[i].to_s
-    string << ' ' if i < array.length - 1
-    i += 1
-  end
-  return string
+def range_between(min, max)
+  min, max = max, min if min > max
+  (min...max).to_a
 end
 
+# ========================
+# Error Handling
+# ========================
+def validate_arguments(args)
+  return if args.size == 2 && args.all? { |arg| numeric?(arg) } && args[0] != args[1]
 
-# Gestion d'erreur
-if ARGV.empty? || ARGV.length != 2 || ARGV[0] !~ (/\A\d+\z/) || ARGV[1] !~ (/\A\d+\z/) || ARGV[0] == ARGV[1]
   puts 'error'
   exit
 end
 
-# Parsing
-min = ARGV[0].to_i
-max = ARGV[1].to_i
+# ========================
+# Parsing Arguments
+# ========================
+def extract_valid_numbers
+  args = ARGV
+  validate_arguments(args)
+  args.map(&:to_i)
+end
 
-# Resolution
-result = entre_min_et_max(min, max)
-resultat = array_to_string(result)
+# ========================
+# Problem Solving
+# ========================
+def compute_range
+  min, max = extract_valid_numbers
+  range_between(min, max).join(' ')
+end
 
-# Resultat
-puts resultat
+# ========================
+# Execution
+# ========================
+puts compute_range
