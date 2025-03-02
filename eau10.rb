@@ -1,34 +1,55 @@
-# Index wanted
-# Affiche le premier index d'un élément recherché dans un tableau
-# Le tableau est constitué de tous les arguments sauf le dernier
-# L'élément recherché est le dernier argument
-# Afficher -1 si l'élément n'est pas trouvé
-# Afficher error et quitter le programme en cas de problèmes d'arguments
+# frozen_string_literal: true
 
-# Fonction
-def index_wanted(element, tableau)
+# Index Wanted
+# Affiche le premier index d'un élément recherché dans un tableau.
+# Le tableau est constitué de tous les arguments sauf le dernier.
+# L'élément recherché est le dernier argument.
+# Affiche "-1" si l'élément n'est pas trouvé.
+# Affiche "error" et quitte le programme en cas de problème d'arguments.
+
+# ========================
+# Utility Functions
+# ========================
+def find_first_occurrence(target, elements)
   i = 0
-  while i < tableau.length
-    if tableau[i] == element
-      return i
-    end
+  while i < elements.length
+    return i if elements[i] == target
+
     i += 1
   end
-  return -1 # Si on arrive ici, c'est que l'élément n'a pas été trouvé
+  -1
 end
 
-# Gestion d'erreur
-if ARGV.length < 2
+# ========================
+# Error Handling
+# ========================
+def validate_arguments(args)
+  return if args.size >= 2
+
   puts 'error'
   exit
 end
 
-# Parsing
-element = ARGV[-1]
-tableau = ARGV[0...-1]
+# ========================
+# Parsing Arguments
+# ========================
+def extract_search_data
+  args = ARGV
+  validate_arguments(args)
+  elements = args[0...-1]
+  target = args[-1]
+  [elements, target]
+end
 
-# Resolution
-resultat = index_wanted(element, tableau)
+# ========================
+# Problem Solving
+# ========================
+def find_target_index
+  elements, target = extract_search_data
+  find_first_occurrence(target, elements)
+end
 
-# Resultat
-puts resultat
+# ========================
+# Execution
+# ========================
+puts find_target_index
