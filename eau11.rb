@@ -1,76 +1,69 @@
-# Différence minimum absolue
-# Affiche la différence minimum absolue entre deux éléments d'un tableau
-# Constitué uniquement de nombres. Nombres négatifs acceptés.
-# Afficher error et quitter le programme en cas de problèmes d'arguments
+# frozen_string_literal: true
 
-# Fonctions
-def convert_to_nombres(tableau)
-  # Vérifier que les éléments du tableau sont des nombres et les convertir en nombres
-  nombres = []
-  for i in (0...tableau.length)
-    unless tableau[i] =~ /\A[-+]?\d+\z/
-      puts 'error'
-      exit
-    end
-    nombres << tableau[i].to_i
-  end
-  return nombres
+# Différence Minimum Absolue
+# Affiche la plus petite différence absolue entre deux nombres consécutifs d'une liste donnée.
+# La liste est constituée uniquement de nombres (positifs et négatifs acceptés).
+# Affiche "error" et quitte le programme en cas de problème d'arguments.
+
+# ========================
+# Utility Functions
+# ========================
+
+def numeric?(value)
+  !Integer(value, exception: false).nil?
 end
 
-def trier_nombres(nombres)
-  i = 0
-  while i < nombres.length - 1
-    j = 0
-    while j < nombres.length - 1 - i
-      if nombres[j] > nombres[j + 1]
-        # Echanger les deux éléments si mal triés
-        temporaire = nombres[j]
-        nombres[j] = nombres[j + 1]
-        nombres[j + 1] = temporaire
-      end
-      j += 1
-    end
-    i +=1
-  end
-  return nombres
+def absolute_difference(first_value, second_value)
+  first_value > second_value ? first_value - second_value : second_value - first_value
 end
 
-def calcul_diff_min_absolue(nombres_triés)
-  # Initialisation de la plus petite différence absolue avec les 2 premiers éléments des nombres_triés
-  result = nombres_triés[1] - nombres_triés[0]
-  if result < 0 # Si negative, on le rend positif ("absolue")
-    result *= -1
+def find_smallest_difference(sorted_numbers)
+  min_difference = absolute_difference(sorted_numbers[0], sorted_numbers[1])
+
+  (1...sorted_numbers.length - 1).each do |i|
+    difference = absolute_difference(sorted_numbers[i], sorted_numbers[i + 1])
+    min_difference = difference if difference < min_difference
   end
 
-  i = 1
-  while i < nombres_triés.length - 1
-    diff = nombres_triés[i + 1] - nombres_triés[i]
-
-    if diff < 0
-      diff *= -1
-    end
-
-    if diff < result
-      result = diff
-    end
-    i += 1
-  end
-  return result
+  min_difference
 end
 
-# Gestion d'erreur
-if ARGV.empty? || ARGV.length < 2
+# ========================
+# Error Handling
+# ========================
+
+def validate_arguments(args)
+  return if args.size >= 2 && args.all? { |arg| numeric?(arg) }
+
   puts 'error'
   exit
 end
 
-# Parsing
-tableau = ARGV
+# ========================
+# Parsing Arguments
+# ========================
 
-# Resolution
-nombres = convert_to_nombres(tableau)
-nombres_triés = trier_nombres(nombres)
-resultat = calcul_diff_min_absolue(nombres_triés)
+def extract_valid_numbers
+  validate_arguments(ARGV)
+  numbers = []
+  i = 0
+  while i < ARGV.length
+    numbers << ARGV[i].to_i
+    i += 1
+  end
+  numbers
+end
 
-# Resultat
-puts resultat
+# ========================
+# Problem Solving
+# ========================
+
+def compute_smallest_absolute_difference
+  numbers = extract_valid_numbers.sort
+  find_smallest_difference(numbers)
+end
+
+# ========================
+# Execution
+# ========================
+puts compute_smallest_absolute_difference
