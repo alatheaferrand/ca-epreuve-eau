@@ -1,82 +1,78 @@
-# Par ordre Ascii
-# Trie les éléments donnés en argument par ordre ASCII
-# Afficher error et quitter le programme en cas de problèmes d'arguments
+# frozen_string_literal: true
 
-# Fonctions
+# Par ordre ASCII
+# Trie les éléments donnés en argument selon l'ordre ASCII.
+# Affiche "error" et quitte le programme en cas de problème d'arguments.
 
-# Etape 1 : Separer les nombres, les mots commençant par une lettre majuscule/minuscule
-def tri_par_categorie(array)
-  nombre = []
-  majuscule = []
-  minuscule = []
+# ========================
+# Utility Functions
+# ========================
 
-  for n in array
-    if n =~ /\A[-+]?\d+\z/
-      nombre << n.to_i
-    elsif n =~ /\A[A-Za-z]+\z/
-      if n[0] =~ /\A[A-Z]\z/
-        majuscule << n
-      elsif n[0] =~ /\A[a-z]\z/
-        minuscule << n
-      end
-    else
-      puts "error at argument #{n}"
-      exit
+def swap_elements(array, first_index, second_index)
+  array[first_index], array[second_index] = array[second_index], array[first_index]
+end
+
+def appears_before?(first_word, second_word)
+  index = 0
+
+  while index < first_word.length && index < second_word.length
+    return true if first_word[index] < second_word[index]
+    return false if first_word[index] > second_word[index]
+
+    index += 1
+  end
+
+  first_word.length < second_word.length
+end
+
+def sort_words_by_ascii(array)
+  size = array.length
+
+  (0...size - 1).each do |current_index|
+    smallest_index = current_index
+
+    (current_index + 1...size).each do |check_index|
+      smallest_index = check_index if appears_before?(array[check_index], array[smallest_index])
     end
-  end
-  return [nombre, majuscule, minuscule]
-end
 
-def tri_dans_categorie(array)
-  i = 0
-  while i < array.length
-    trié = false # Flag pour arrêter le tri quand tout est trié
-    while !trié # Tant que trié est false
-      trié = true
-      j = 0
-      while j < array[i].length - 1    
-        if array[i][j] > array[i][j + 1]
-          # Echanger les deux éléments si mal triés
-          temporaire = array[i][j]
-          array[i][j] = array[i][j + 1]
-          array[i][j + 1] = temporaire
-          trié = false # On a fait un échange, donc on continue le tri
-        end
-        j += 1
-      end
-    end
-    i += 1
-  end
-  return array
-end
-
-def array_to_string(new_array) # Au lieu de array.join(' ') pour les strings
-  string = ""
-  n = new_array[0] + new_array[1] + new_array[2]
-
-  i = 0
-  while i < n.length
-    string << n[i].to_s
-    string << ' ' if i < n.length - 1
-    i += 1
+    swap_elements(array, current_index, smallest_index) if smallest_index != current_index
   end
 
-  return string
+  array
 end
 
-# Gestion d'erreur
-if ARGV.empty?
+# ========================
+# Error Handling
+# ========================
+
+def validate_arguments(arguments)
+  return unless arguments.empty?
+
   puts 'error'
   exit
 end
 
-# Parsing
-array = ARGV
+# ========================
+# Parsing Arguments
+# ========================
 
-# Resolution
-array = tri_par_categorie(array)
-new_array = tri_dans_categorie(array)
-resultat = array_to_string(new_array)
+def extract_words
+  arguments = ARGV
+  validate_arguments(arguments)
+  arguments
+end
 
-# Resultat
-puts resultat
+# ========================
+# Problem Solving
+# ========================
+
+def sort_by_ascii_order
+  words = extract_words
+  sort_words_by_ascii(words).join(' ')
+end
+
+# ========================
+# Execution
+# ========================
+
+puts sort_by_ascii_order
