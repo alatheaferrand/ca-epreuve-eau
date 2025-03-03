@@ -1,68 +1,79 @@
+# frozen_string_literal: true
+
 # Tri à bulle
 # Affiche la liste des nombres triés dans l'ordre croissant
 # Utiliser une fonction de cette forme :
 # my_bubble_sort(array) {
 #   votre algorithme
-#  return (new_array)
+#   return (new_array)
 # }
 # Afficher error et quitter le programme en cas de problèmes d'arguments
 
-# Fonctions
-def convert_to_nombres(tableau)
-  # Vérifier que les éléments du tableau sont des nombres et les convertir en nombres
-  nombres = []
-  for i in (0...tableau.length)
-    unless tableau[i] =~ /\A[-+]?\d+\z/
-      puts 'error'
-      exit
-    end
-    nombres << tableau[i].to_i
-  end
-  return nombres
+# ========================
+# Utility Functions
+# ========================
+
+def numeric?(value)
+  !Integer(value, exception: false).nil?
 end
 
+# my_bubble_sort
 def my_bubble_sort(array)
-  i = 0
-  while i < array.length - 1
-    j = 0
-    while j < array.length - 1 - i
-      if array[j] > array[j + 1]
-        # Echanger les deux éléments si mal triés
-        temporaire = array[j]
-        array[j] = array[j + 1]
-        array[j + 1] = temporaire
-      end
-      j += 1
+  length = array.length
+  (length - 1).times do |i|
+    (length - 1 - i).times do |j|
+      array[j], array[j + 1] = array[j + 1], array[j] if array[j] > array[j + 1]
     end
-    i +=1
   end
-  return array
+  array
 end
 
-def array_to_string(new_array)
-  i = 0
-  string = ""
-  while i < new_array.length
-    string << new_array[i].to_s
-    string << ' ' if i < new_array.length - 1
-    i += 1
-  end
-  return string
-end
+# ========================
+# Error Handling
+# ========================
 
-# Gestion d'erreur
-if ARGV.empty? || ARGV.length < 2
+def validate_arguments(args)
+  return if args.size >= 2 && args.all? { |arg| numeric?(arg) }
+
   puts 'error'
   exit
 end
 
-# Parsing
-tableau = ARGV
+# ========================
+# Parsing Arguments
+# ========================
 
-# Resolution
-array = convert_to_nombres(tableau)
-new_array = my_bubble_sort(array)
-resultat = array_to_string(new_array)
+def extract_valid_numbers
+  args = ARGV
+  validate_arguments(args)
+  numbers = []
+  i = 0
+  while i < args.length
+    numbers << args[i].to_i
+    i += 1
+  end
+  numbers
+end
 
-# Resultat
-puts resultat
+# ========================
+# Problem Solving
+# ========================
+
+def compute_sorted_numbers
+  numbers = extract_valid_numbers
+  sorted_numbers = my_bubble_sort(numbers)
+
+  result = +''
+  i = 0
+  while i < sorted_numbers.length
+    result << sorted_numbers[i].to_s
+    result << ' ' if i < sorted_numbers.length - 1
+    i += 1
+  end
+  result
+end
+
+# ========================
+# Execution
+# ========================
+puts compute_sorted_numbers
