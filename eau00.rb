@@ -7,10 +7,10 @@
 # ========================
 # Problem Solving
 # ========================
-def number_combinations
+def three_digit_combinations()
   result = []
-  (0..7).each do |i|
-    (i + 1..8).each do |j|
+  (0..9).each do |i|
+    (i + 1..9).each do |j|
       (j + 1..9).each { |k| result << "#{i}#{j}#{k}" }
     end
   end
@@ -20,4 +20,4 @@ end
 # ========================
 # Execution
 # ========================
-puts number_combinations.join(', ')
+puts three_digit_combinations().join(', ')

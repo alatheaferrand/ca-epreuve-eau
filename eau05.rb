@@ -2,17 +2,23 @@
 
 # String dans string
 # Détermine si une chaîne de caractères est contenue dans une autre chaîne.
-# Affiche error et quitte le programme en cas de problèmes d'arguments.
+# Affiche error et quitte le programme en cas de problème d'arguments.
 
 # ========================
 # Utility Functions
 # ========================
-def substring?(text, pattern)
-  text_length = text.length
-  pattern_length = pattern.length
+def includes_substring?(string, substring)
+  i = 0
+  while i <= string.length - substring.length
+    j = 0
 
-  (0..text_length - pattern_length).each do |i|
-    return true if text[i, pattern_length] == pattern
+    while j < substring.length && string[i + j] == substring[j]
+      j += 1
+    end
+
+    return true if j == substring.length
+
+    i += 1
   end
 
   false
@@ -21,31 +27,35 @@ end
 # ========================
 # Error Handling
 # ========================
-def validate_arguments(args)
-  return if args.size == 2 && args.none?(&:empty?)
+def two_arguments?(arguments)
+  arguments.size == 2
+end
 
-  puts 'error: 2 arguments required'
-  exit
+def validate_arguments(arguments)
+  return '-1: two arguments required' unless two_arguments?(arguments)
+
+  nil # Indique que la validation est passée
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def parse_arguments
-  args = ARGV
-  validate_arguments(args)
-  args
+def retrieve_arguments()
+  return ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def contains_substring?
-  text, pattern = parse_arguments
-  substring?(text, pattern)
+def contains_substring?()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  includes_substring?(arguments[0], arguments[1])
 end
 
 # ========================
 # Execution
 # ========================
-puts contains_substring?
+puts contains_substring?()

@@ -7,38 +7,55 @@
 # ========================
 # Utility Functions
 # ========================
-def numeric?(text)
-  text.chars.all? { |char| char.between?('0', '9') }
+def char_between_0_and_9?(char)
+  (0..9).each do |number|
+    return true if char == number.to_s
+  end
+  false
+end
+
+def is_negative?(number)
+  number[0] == '-'
+end
+
+def is_numeric?(number)
+  number = number[1..] if is_negative?(number)
+  number.each_char { |char| return false unless char_between_0_and_9?(char) }
+  true
 end
 
 # ========================
 # Error Handling
 # ========================
-def validate_argument_presence(args)
-  return if args.size == 1 && !args[0].empty?
+def single_argument?(arguments)
+  arguments.size == 1
+end
 
-  puts 'error'
-  exit
+def validate_argument_presence(args)
+  return 'error: one argument required' unless single_argument?(args)
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def extract_text_argument
-  args = ARGV
-  validate_argument_presence(args)
-  args[0]
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def check_numeric_string
-  text = extract_text_argument
-  numeric?(text)
+def is_numeric_string?()
+  arguments = retrieve_arguments()
+  error_message = validate_argument_presence(arguments)
+  return error_message if error_message
+
+  is_numeric?(arguments[0])
 end
 
 # ========================
 # Execution
 # ========================
-puts check_numeric_string
+puts is_numeric_string?()

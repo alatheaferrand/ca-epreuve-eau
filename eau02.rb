@@ -6,11 +6,11 @@
 # ========================
 # Utility Functions
 # ========================
-def reverse_arguments(args)
+def reverse_array(array)
   reversed = []
-  i = args.length - 1
+  i = array.length - 1
   while i >= 0
-    reversed << args[i]
+    reversed << array[i]
     i -= 1
   end
   reversed
@@ -19,30 +19,35 @@ end
 # ========================
 # Error Handling
 # ========================
-def check_arguments_presence(args)
-  return if args.size >= 2
+def at_least_two_arguments?(arguments)
+  arguments.size >= 2
+end
 
-  puts 'error: at least 2 arguments required'
-  exit
+def validate_arguments(arguments)
+  return 'error: at least 2 arguments required' unless at_least_two_arguments?(arguments)
+
+  nil # Indique que la validation est passée
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def parse_arguments
-  ARGV
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def reverse_and_display_arguments
-  args = parse_arguments
-  check_arguments_presence(args)
-  puts reverse_arguments(args)
+def reversed_arguments()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  return reverse_array(arguments)
 end
 
 # ========================
 # Execution
 # ========================
-reverse_and_display_arguments
+puts reversed_arguments()

@@ -14,62 +14,69 @@
 # Utility Functions
 # ========================
 
-def numeric?(value)
-  !Integer(value, exception: false).nil?
-end
-
 # Implémentation du tri par sélection
-def my_selection_sort(array)
-  length = array.length
+def my_selection_sort(numbers)
+  length = numbers.length
 
   (0...length - 1).each do |i|
     min_index = i
 
     (i + 1...length).each do |j|
-      min_index = j if array[j] < array[min_index]
+      min_index = j if numbers[j] < numbers[min_index]
     end
 
-    array[i], array[min_index] = array[min_index], array[i] if min_index != i
+    numbers[i], numbers[min_index] = numbers[min_index], numbers[i] if min_index != i
   end
 
-  array
+  numbers
 end
 
 # ========================
 # Error Handling
 # ========================
 
-def validate_numeric_arguments(args)
-  return if args.size >= 2 && args.all? { |arg| numeric?(arg) }
+def at_least_two_arguments?(arguments)
+  arguments.size >= 2
+end
 
-  puts 'error'
-  exit
+def numeric?(number)
+  !Integer(number, exception: false).nil?
+end
+
+def validate_arguments(arguments)
+  return 'error: at least 2 arguments required' unless at_least_two_arguments?(arguments)
+  return 'error: all arguments must be numeric' unless arguments.all? { |argument| numeric?(argument) }
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
 
-def extract_numbers
-  args = ARGV
-  validate_numeric_arguments(args)
-
-  numbers = []
-  args.each { |arg| numbers << arg.to_i }
-  numbers
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
 
-def compute_sorted_numbers
-  numbers = extract_numbers
-  my_selection_sort(numbers).join(' ')
+def my_selection_sorted_numbers()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+  
+  numbers = []
+  for i in 0..arguments.length - 1
+    numbers << arguments[i].to_i
+  end
+
+  return my_selection_sort(numbers).join(' ')
 end
 
 # ========================
 # Execution
 # ========================
 
-puts compute_sorted_numbers
+puts my_selection_sorted_numbers()

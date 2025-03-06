@@ -9,52 +9,79 @@
 # ========================
 # Utility Functions
 # ========================
-def capitalize_words(text)
-  result = +'' # Utilisation de l'unary `+` pour obtenir une chaîne mutable
-  @new_word = true
-
-  text.each_char { |char| result << process_character(char) }
-
-  result
+def char_between_a_and_z?(char)
+  ('A' <= char && char <= 'Z') || ('a' <= char && char <= 'z')
 end
 
-def process_character(char)
-  @new_word = true if char !~ /\p{Alpha}/
-  return char unless char =~ /\p{Alpha}/
+def to_uppercase(char)
+  char = (char.ord - 32).chr if 'a' <= char && char <= 'z'
+  char
+end
 
-  transformed_char = @new_word ? char.upcase : char.downcase
-  @new_word = false
-  transformed_char
+def to_lowercase(char)
+  char = (char.ord + 32).chr if 'A' <= char && char <= 'Z'
+  char
+end
+
+def capitalize_words(string)
+  result = +''
+  new_word = true
+  index = 0
+
+  while index < string.length
+    char = string[index]
+
+    if char_between_a_and_z?(char)
+      char = new_word ? to_uppercase(char) : to_lowercase(char)
+      new_word = false
+    else
+      new_word = true
+    end
+
+    result << char
+    index += 1
+  end
+
+  result
 end
 
 # ========================
 # Error Handling
 # ========================
-def validate_argument_presence(args)
-  return if args.size == 1 && args[0] =~ /\p{Alpha}/
+def single_argument?(arguments)
+  arguments.size == 1
+end
 
-  puts 'error'
-  exit
+def numeric?(number)
+  !Integer(number, exception: false).nil?
+end
+
+def validate_arguments(arguments)
+  return 'error: one argument required' unless single_argument?(arguments)
+  return 'error: argument must be a string' if numeric?(arguments[0])
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def retrieve_text_argument
-  args = ARGV
-  validate_argument_presence(args)
-  args[0]
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def apply_capitalization
-  text = retrieve_text_argument
-  capitalize_words(text)
+def apply_capitalization()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  capitalize_words(arguments[0])
 end
 
 # ========================
 # Execution
 # ========================
-puts apply_capitalization
+puts apply_capitalization()

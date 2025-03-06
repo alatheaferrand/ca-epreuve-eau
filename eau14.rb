@@ -7,72 +7,107 @@
 # ========================
 # Utility Functions
 # ========================
-
-def swap_elements(array, first_index, second_index)
-  array[first_index], array[second_index] = array[second_index], array[first_index]
+# Convertit une chaîne en tableau ASCII
+def string_to_ascii(string)
+  ascii_array = []
+  string.each_char { |char| ascii_array << char.ord }
+  ascii_array
 end
 
-def appears_before?(first_word, second_word)
-  index = 0
+# Convertit une liste de chaînes en tableaux ASCII
+def strings_to_ascii_array(strings)
+  ascii_arrays = []
+  strings.each { |string| ascii_arrays << string_to_ascii(string) }
+  ascii_arrays
+end
 
-  while index < first_word.length && index < second_word.length
-    return true if first_word[index] < second_word[index]
-    return false if first_word[index] > second_word[index]
-
-    index += 1
+# Convertit une liste de tableaux ASCII en chaînes de caractères
+def ascii_arrays_to_strings(ascii_arrays)
+  strings = []
+  ascii_arrays.each do |ascii_array|
+    string = +''
+    ascii_array.each { |ascii| string << ascii.chr }
+    strings << string
   end
-
-  first_word.length < second_word.length
+  strings
 end
 
-def sort_words_by_ascii(array)
-  size = array.length
+# Compare deux tableaux ASCII (renvoie true si a < b en ASCII)
+def compare_ascii_arrays(a, b)
+  i = 0
+  while i < a.length && i < b.length
+    return true if a[i] < b[i]
+    return false if a[i] > b[i]
+    i += 1
+  end
+  a.length < b.length
+end
 
-  (0...size - 1).each do |current_index|
-    smallest_index = current_index
-
-    (current_index + 1...size).each do |check_index|
-      smallest_index = check_index if appears_before?(array[check_index], array[smallest_index])
+# Trie une liste de tableaux ASCII avec un tri à bulle
+def my_bubble_sort(ascii_arrays)
+  length = ascii_arrays.length
+  (length - 1).times do |i|
+    (length - 1 - i).times do |j|
+      if compare_ascii_arrays(ascii_arrays[j + 1], ascii_arrays[j])
+        ascii_arrays[j], ascii_arrays[j + 1] = ascii_arrays[j + 1], ascii_arrays[j]
+      end
     end
-
-    swap_elements(array, current_index, smallest_index) if smallest_index != current_index
   end
-
-  array
+  ascii_arrays
 end
+
+# Fonction principale
+def ascii_sort(arguments)
+  return if arguments.empty?
+
+  # 1️⃣ Convertit les chaînes en tableaux ASCII
+  ascii_arrays = strings_to_ascii_array(arguments)
+
+  # 2️⃣ Trie les tableaux ASCII
+  sorted_ascii_arrays = my_bubble_sort(ascii_arrays)
+
+  # 3️⃣ Convertit les tableaux triés en chaînes et affiche le résultat
+  sorted_strings = ascii_arrays_to_strings(sorted_ascii_arrays)
+  return sorted_strings
+end
+
 
 # ========================
 # Error Handling
 # ========================
 
-def validate_arguments(arguments)
-  return unless arguments.empty?
+def at_least_one_argument?(arguments)
+  arguments.size >= 1
+end
 
-  puts 'error'
-  exit
+def validate_arguments(arguments)
+  return 'error: at least one argument required' unless at_least_one_argument?(arguments)
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
 
-def extract_words
+def retrieve_arguments()
   arguments = ARGV
-  validate_arguments(arguments)
-  arguments
 end
 
 # ========================
 # Problem Solving
 # ========================
 
-def sort_by_ascii_order
-  words = extract_words
-  sort_words_by_ascii(words).join(' ')
+def sorted_by_ascii_order()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  return ascii_sort(arguments)
 end
 
 # ========================
 # Execution
 # ========================
 
-puts sort_by_ascii_order
+puts sorted_by_ascii_order().join(' ')

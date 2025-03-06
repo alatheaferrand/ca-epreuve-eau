@@ -8,43 +8,58 @@
 # ========================
 # Utility Functions
 # ========================
-def numeric?(arg)
-  !Integer(arg, exception: false).nil?
-end
-
 def range_between(min, max)
   min, max = max, min if min > max
-  (min...max).to_a
+  
+  range = []
+  current = min
+
+  while current < max
+    range << current
+    current += 1
+  end
+
+  range
 end
 
 # ========================
 # Error Handling
 # ========================
-def validate_arguments(args)
-  return if args.size == 2 && args.all? { |arg| numeric?(arg) } && args[0] != args[1]
+def two_arguments?(arguments)
+  arguments.size == 2
+end
 
-  puts 'error'
-  exit
+def numeric?(number)
+  !Integer(number, exception: false).nil?
+end
+
+def validate_arguments(arguments)
+  return 'error: two arguments required' unless two_arguments?(arguments)
+  return 'error: all arguments must be numeric' unless numeric?(arguments[0]) && numeric?(arguments[1])
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def extract_valid_numbers
-  args = ARGV
-  validate_arguments(args)
-  args.map(&:to_i)
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def compute_range
-  min, max = extract_valid_numbers
-  range_between(min, max).join(' ')
+def compute_range()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  min, max = arguments[0].to_i, arguments[1].to_i
+  return range_between(min, max).join(' ')
 end
 
 # ========================
 # Execution
 # ========================
-puts compute_range
+puts compute_range()

@@ -8,14 +8,32 @@
 # ========================
 # Utility Functions
 # ========================
-def alternate_case_text(text)
-  result = +'' # Chaîne mutable, même avec frozen_string_literal: true
-  processed_letters = 0
+def is_even?(number)
+  number % 2 == 0
+end
 
-  text.each_char do |char|
-    if char.between?('A', 'Z') || char.between?('a', 'z')
-      char = processed_letters.even? ? char.upcase : char.downcase
-      processed_letters += 1
+def char_between_a_and_z?(char)
+  ('A' <= char && char <= 'Z') || ('a' <= char && char <= 'z')
+end
+
+def to_uppercase(char)
+  char = (char.ord - 32).chr if 'a' <= char && char <= 'z'
+  char
+end
+
+def to_lowercase(char)
+  char = (char.ord + 32).chr if 'A' <= char && char <= 'Z'
+  char
+end
+
+def toggle_case_letters(string)
+  result = +''
+  letter_count = 0
+
+  string.each_char do |char|
+    if char_between_a_and_z?(char)
+      char = is_even?(letter_count) ? to_uppercase(char) : to_lowercase(char)
+      letter_count += 1
     end
     result << char
   end
@@ -26,31 +44,40 @@ end
 # ========================
 # Error Handling
 # ========================
-def validate_text_argument(args)
-  return if args.size == 1 && args[0].count('a-zA-Z').positive?
+def single_argument?(arguments)
+  arguments.size == 1
+end
 
-  puts 'error'
-  exit
+def numeric?(number)
+  !Integer(number, exception: false).nil?
+end
+
+def validate_arguments(arguments)
+  return 'error: one argument required' unless single_argument?(arguments)
+  return 'error: argument must be a string' if numeric?(arguments[0])
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def extract_valid_text_argument
-  args = ARGV
-  validate_text_argument(args)
-  args[0]
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def apply_alternate_case
-  text = extract_valid_text_argument
-  alternate_case_text(text)
+def convert_to_alternate_case()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  return toggle_case_letters(arguments[0])
 end
 
 # ========================
 # Execution
 # ========================
-puts apply_alternate_case
+puts convert_to_alternate_case()

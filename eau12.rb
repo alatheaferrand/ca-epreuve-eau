@@ -13,67 +13,62 @@
 # Utility Functions
 # ========================
 
-def numeric?(value)
-  !Integer(value, exception: false).nil?
-end
-
 # my_bubble_sort
-def my_bubble_sort(array)
-  length = array.length
+def my_bubble_sort(numbers)
+  length = numbers.length
   (length - 1).times do |i|
     (length - 1 - i).times do |j|
-      array[j], array[j + 1] = array[j + 1], array[j] if array[j] > array[j + 1]
+      numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j] if numbers[j] > numbers[j + 1]
     end
   end
-  array
+  numbers
 end
 
 # ========================
 # Error Handling
 # ========================
 
-def validate_arguments(args)
-  return if args.size >= 2 && args.all? { |arg| numeric?(arg) }
+def at_least_two_arguments?(arguments)
+  arguments.size >= 2
+end
 
-  puts 'error'
-  exit
+def numeric?(number)
+  !Integer(number, exception: false).nil?
+end
+
+def validate_arguments(arguments)
+  return 'error: at least 2 arguments required' unless at_least_two_arguments?(arguments)
+  return 'error: all arguments must be numeric' unless arguments.all? { |argument| numeric?(argument) }
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
 
-def extract_valid_numbers
-  args = ARGV
-  validate_arguments(args)
-  numbers = []
-  i = 0
-  while i < args.length
-    numbers << args[i].to_i
-    i += 1
-  end
-  numbers
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
 
-def compute_sorted_numbers
-  numbers = extract_valid_numbers
-  sorted_numbers = my_bubble_sort(numbers)
+def my_bubble_sorted_numbers()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
 
-  result = +''
-  i = 0
-  while i < sorted_numbers.length
-    result << sorted_numbers[i].to_s
-    result << ' ' if i < sorted_numbers.length - 1
-    i += 1
+  numbers = []
+  for i in 0..arguments.length - 1
+    numbers << arguments[i].to_i
   end
-  result
+
+  return my_bubble_sort(numbers).join(' ')
 end
 
 # ========================
 # Execution
 # ========================
-puts compute_sorted_numbers
+puts my_bubble_sorted_numbers()

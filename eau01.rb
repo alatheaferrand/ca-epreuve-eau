@@ -15,22 +15,15 @@ end
 # Problem Solving
 # ========================
 # Génère toutes les combinaisons de deux nombres entre 00 et 99 dans l'ordre croissant
-def ordered_number_pairs
+def two_pair_combinations()
   result = []
-  (0..98).each do |i|
+  (0..99).each do |i|
     ((i + 1)..99).each { |j| result << "#{format_two_digits(i)} #{format_two_digits(j)}" }
   end
-  result
-end
-
-# ========================
-# Display
-# ========================
-def display_ordered_pairs
-  puts ordered_number_pairs.join(', ')
+  return result
 end
 
 # ========================
 # Execution
 # ========================
-display_ordered_pairs
+puts two_pair_combinations().join(', ')

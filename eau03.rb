@@ -9,53 +9,61 @@
 # ========================
 # Utility Functions
 # ========================
-def numeric?(arg)
-  !Integer(arg, exception: false).nil?
-end
+def fibonacci_iterative(index)
+  return index if index < 2
 
-def fibonacci(n, memo = {})
-  return n if n < 2
-  memo[n] ||= fibonacci(n - 1, memo) + fibonacci(n - 2, memo)
+  previous, current = 0, 1
+
+  (2..index).each do
+    previous, current = current, previous + current
+  end
+
+  current
 end
 
 # ========================
 # Error Handling
 # ========================
-def validate_argument(args)
-  if args.size != 1
-    puts 'error: 1 argument required'
-    exit
-  end
+def numeric?(number)
+  !Integer(number, exception: false).nil?
+end
 
-  unless numeric?(args[0])
-    puts 'error: argument must be numeric'
-    exit
-  end
+def single_argument?(arguments)
+  arguments.size == 1
+end
 
-  if args[0].to_i.negative?
-    puts 'error: argument must be a positive integer'
-    exit
-  end
+def positive_integer?(number)
+  number.to_i >= 0
+end
+
+def validate_arguments(arguments)
+  return '-1: one argument required' unless single_argument?(arguments)
+  return '-1: argument must be an integer' unless numeric?(arguments[0])
+  return '-1: argument must be positive' unless positive_integer?(arguments[0])
+
+  nil
 end
 
 # ========================
 # Parsing Arguments
 # ========================
-def parse_argument
-  args = ARGV
-  validate_argument(args)
-  args[0].to_i
+def retrieve_arguments()
+  arguments = ARGV
 end
 
 # ========================
 # Problem Solving
 # ========================
-def compute_fibonacci_result
-  index = parse_argument
-  fibonacci(index)
+def fibonacci_at_index()
+  arguments = retrieve_arguments()
+  error_message = validate_arguments(arguments)
+  return error_message if error_message
+
+  index = arguments[0].to_i
+  fibonacci_iterative(index)
 end
 
 # ========================
 # Execution
 # ========================
-puts compute_fibonacci_result
+puts fibonacci_at_index()
