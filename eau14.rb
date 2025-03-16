@@ -103,11 +103,11 @@ def sorted_by_ascii_order()
   error_message = validate_arguments(arguments)
   return error_message if error_message
 
-  return ascii_sort(arguments)
+  return ascii_sort(arguments).join(' ')
 end
 
 # ========================
 # Execution
 # ========================
 
-puts sorted_by_ascii_order().join(' ')
+puts sorted_by_ascii_order()
